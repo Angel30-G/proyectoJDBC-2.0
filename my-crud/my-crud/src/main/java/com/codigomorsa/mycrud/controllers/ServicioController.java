@@ -101,9 +101,10 @@ public class ServicioController {
 
 
     @PatchMapping("/taller/{id}/cliente/{id}/servicio/{id}")
-    public long createCierreServicio(@RequestBody Servicio newServicio){
-        return ServicioService.createCierreServicio(newServicio);
+    public long createCierreServicio(@RequestBody Servicio newServicio,  long idServicio){
+        return ServicioService.createCierreServicio(newServicio, idServicio);
     }
+
 
    
 
