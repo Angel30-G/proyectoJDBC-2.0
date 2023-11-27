@@ -42,14 +42,13 @@ create table cliente(
 );
 
 create table vehiculo(
-  id int not null auto_increment,
   numero_placa varchar(50) not null,
   marca varchar(50) not null,
   modelo varchar(50) not null,
   año_fabricacion date not null,
   VIN varchar(50) not null,
   cliente int,
-  primary key(id),
+  primary key(numero_placa),
   foreign key(cliente) references cliente(id)
 );
   
@@ -71,9 +70,9 @@ create table servicio(
   costo_total_mano_de_obra int not null,
   costo_total_facturado int,
   porcentaje_utilidad int,
-  vehiculo int,
+  vehiculo_placa varchar(50),
   primary key(id),
-  foreign key(vehiculo) references vehiculo(id)
+  foreign key(vehiculo_placa) references vehiculo(numero_placa)
 );
 
 create table piezas_compradas(
@@ -148,6 +147,9 @@ end;
 delimiter ;
 
 
+
+
+  
 -- Insert into taller table
 INSERT INTO taller (nombre, provincia, canton, distrito, otras_señas, costo_operacion, horas_de_trabajo, telefono, nombre_usuario, email, contraseña) 
 VALUES
@@ -156,41 +158,38 @@ VALUES
 -- Insert into cliente table
 INSERT INTO cliente (numero_cliente, cedula, tipo_cedula, telefono, email, taller) 
 VALUES
-  (1, 123456789, 'Física', 22223333, 'cliente1@gmail.com', 1),
-  (2, 29382933, 'Física', 192939398, 'cliente2@gmail.com', 1),
-  (3, 87383728, 'Virtual', 28928389, 'cliente3@gmail.com', 1);
+  (1, 123456789, 'Física', 22223333, 'cliente1@gmail.com', 1);
 
 -- Insert into vehiculo table
 INSERT INTO vehiculo (numero_placa, marca, modelo, año_fabricacion, VIN, cliente) 
 VALUES
-  ('ABC123', 'Toyota', 'Camry', '2020-01-01', '123ABC', 1),
-  ('ABC123', 'Nissan', 'gay', '2020-01-03', '123AKC', 1),
-  ('ABC123', 'Mitsubishi', 'no entiendo', '2020-01-04', '123ABP', 3);
+  ('ABC123', 'Toyota', 'Camry', '2020-01-01', '123ABC', 1);
 
 
 -- Insert into pieza table
 INSERT INTO pieza (codigo, descripcion, costo) 
 VALUES
-  ('P001', 'Batería', 100),
-  ('P001', 'Tuercas', 100);
+  ('P001', 'Batería', 100);
   
 -- Insert into servicio table
-INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo) 
+INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo_placa) 
 VALUES
-  ('2023-01-01', '2023-01-05', 'Reparación de motor', 7, 45000, null, null, 1),
-  ('2023-01-01', '2023-01-05', 'Reparación de nada', 5, 30000, null, null, 2),
-  ('2023-01-01', '2023-01-05', 'Reparación de transmision', 6, 100000, null, null, 3);
+  ('2023-01-01', '2023-01-05', 'Reparación de motor', 7, 45000, null, null, 'ABC123');
   
 
+INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo_placa) 
+VALUES
+  ('2023-01-01', '2023-01-05', 'Reparación de motor', 7, 18000, null, null,'ABC123');
 
 -- Insert into piezas_compradas table
 INSERT INTO piezas_compradas (codigo, cantidad, costo_total, pieza, servicio) 
 VALUES
-  ('P001', 2, 200, 1, 1),
-  ('P002', 1, 20000, 1, 2);
+  ('P001', 2, 200, 1, 1);
 
 
   
 call calcular_datos_financieros(1);
 
 select * from servicio;
+
+select * from vehiculo;
