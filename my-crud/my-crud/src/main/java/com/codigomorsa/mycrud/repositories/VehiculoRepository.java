@@ -20,6 +20,7 @@ public class VehiculoRepository {
     private final RowMapper<Cliente> Cmapper = new VehiculoRepository.ClienteMapper();
 
 
+
     //private final SimpleJdbcInsert insert;
 
     public VehiculoRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource){
@@ -116,4 +117,14 @@ public class VehiculoRepository {
 
         return vehiculo;
     }
+
+    public boolean existsByPlaca(String numero_placa) {
+        String sql = "SELECT COUNT(*) FROM vehiculo WHERE numero_placa = :numero_placa";
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("numero_placa", numero_placa);
+
+        int count = jdbcTemplate.queryForObject(sql, parameters, Integer.class);
+        return count > 0;
+    }
+
 }

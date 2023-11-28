@@ -100,7 +100,7 @@ begin
     
    SELECT (SELECT costo_total_mano_de_obra / horas_invertidas  FROM servicio WHERE servicio.id = servicio_id) INTO costo_unitario_mano_obra_hora;
 
-   SELECT SUM(pc.costo_total) INTO costo_total_piezas FROM piezas_compradas pc WHERE pc.pieza = servicio_id;
+   SELECT SUM(pc.costo_total) INTO costo_total_piezas FROM piezas_compradas pc WHERE pc.servicio = servicio_id;
     
     set porcentaje_utilidad_p = ((costo_unitario_mano_obra_hora / costo_minimo_operacion_hora) - 1) * 100;
     

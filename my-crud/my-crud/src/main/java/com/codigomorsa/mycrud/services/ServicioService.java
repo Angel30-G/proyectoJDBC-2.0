@@ -3,6 +3,7 @@ package com.codigomorsa.mycrud.services;
 import com.codigomorsa.mycrud.model.Servicio;
 import com.codigomorsa.mycrud.model.Vehiculo;
 import com.codigomorsa.mycrud.repositories.ServicioRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +38,23 @@ public class ServicioService {
         return repository.getServicioById(id);
     }
 
-    public Vehiculo getVehiculoByPlaca(String placa){
+   /* public Vehiculo getVehiculoByPlaca(String placa){
         return repository.getVehiculoByPlaca(placa);
+    }*/
+
+    public long createServicioP(Servicio newServicioP) {
+        return repository.createServicioP(newServicioP);
     }
+    public ResponseEntity<String> createServicioPlaca(Servicio newServicioP){
+        return repository.createServicioPlaca(newServicioP);
+    }
+
+   /* public ResponseEntity<String> createServicioPlaca(Servicio newServicioP){
+        return repository.createServicioPlaca(newServicioP);
+    } */
+
+   /* public ResponseEntity<String> createServicioPla(Servicio newServicioP){
+        return repository.createServicioPla(newServicioP);
+    } */
 
 }

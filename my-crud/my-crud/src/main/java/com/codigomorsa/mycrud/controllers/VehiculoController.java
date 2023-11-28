@@ -14,9 +14,10 @@ import java.util.List;
 public class VehiculoController {
     private final VehiculoService VehiculoService;
 
-    public VehiculoController(VehiculoService VehiculoService){
-        this.VehiculoService = VehiculoService;
+    public VehiculoController(com.codigomorsa.mycrud.services.VehiculoService vehiculoService) {
+        VehiculoService = vehiculoService;
     }
+
 
     @GetMapping("/vehiculo")
     public List<Vehiculo> getAllVehiculo(){
@@ -26,5 +27,9 @@ public class VehiculoController {
     @PostMapping("/vehiculo")
     public long createVehiculo(@RequestBody Vehiculo newVehiculo) {
         return VehiculoService.createVehiculo(newVehiculo);
+    }
+
+    public boolean existsByPlaca(String placa){
+        return VehiculoService.existsByPlaca(placa);
     }
 }

@@ -20,7 +20,7 @@ public class Servicio {
 
     public final int porcentaje_utilidad;
 
-    public final String vehiculo;
+    public final String vehiculo_placa;
 
     private List<Cliente> clienteList;
 
@@ -29,6 +29,12 @@ public class Servicio {
     private List<Piezas_Compradas> piezasCompradasList;
 
     private List<Vehiculo> numero_placa;
+
+
+    public String getVehiculo_placa() {
+        return vehiculo_placa;
+    }
+
 
     public List<Piezas_Compradas> getPiezasCompradasList() {
         return piezasCompradasList;
@@ -55,17 +61,7 @@ public class Servicio {
     }
 
 
-    public Servicio(long id, Date fechaIngreso, Date fechaConclusion, String descripcion, int horasInvertidas, int costoTotalManoDeObra, int costoTotalFacturado, int porcentajeUtilidad, String vehiculo) {
-        this.id = id;
-        fecha_ingreso = fechaIngreso;
-        fecha_conclusion = fechaConclusion;
-        this.descripcion = descripcion;
-        horas_invertidas = horasInvertidas;
-        costo_total_mano_de_obra = costoTotalManoDeObra;
-        costo_total_facturado = costoTotalFacturado;
-        porcentaje_utilidad = porcentajeUtilidad;
-        this.vehiculo = vehiculo;
-    }
+
 
     public long getId() {
         return id;
@@ -99,10 +95,17 @@ public class Servicio {
         return porcentaje_utilidad;
     }
 
-    public String getVehiculo() {
-        return vehiculo;
+
+    public Servicio(long id, Date fechaIngreso, Date fechaConclusion, String descripcion, int horasInvertidas, int costoTotalManoDeObra, int costoTotalFacturado, int porcentajeUtilidad, String vehiculoPlaca) {
+        this.id = id;
+        fecha_ingreso = fechaIngreso;
+        fecha_conclusion = fechaConclusion;
+        this.descripcion = descripcion;
+        horas_invertidas = horasInvertidas;
+        costo_total_mano_de_obra = costoTotalManoDeObra;
+        costo_total_facturado = costoTotalFacturado;
+        porcentaje_utilidad = porcentajeUtilidad;
+        vehiculo_placa = vehiculoPlaca;
     }
-
-
 
 }

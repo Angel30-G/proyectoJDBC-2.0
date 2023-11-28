@@ -30,4 +30,8 @@ public class VehiculoService {
     public Vehiculo getVehiculoByPlaca(String placa){
         return repository.getVehiculoByPlaca(placa);
     }
+
+    public boolean existsByPlaca(String placa){
+        return repository.existsByPlaca(placa);
+    }
 }

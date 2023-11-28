@@ -2,6 +2,9 @@ package com.codigomorsa.mycrud.repositories;
 
 import com.codigomorsa.mycrud.model.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,9 +28,12 @@ public class ServicioRepository {
 
     //private final RowMapper<Servicio> Smapper = new ServicioMapper();
 
-    public VehiculoRepository vehiculoRepository;
+   // public VehiculoRepository vehiculoRepository;
 
     public ClienteRepository clienteRepository;
+
+    @Autowired
+    private VehiculoRepository vehiculoRepository;
 
     private final ServicioMapper mapper = new ServicioMapper();
     //private final RowMapper<Servicio> Smapper = new ServicioMapper();
@@ -135,7 +141,7 @@ public class ServicioRepository {
 
         // Obtener la información del vehículo relacionado
         String sqlVehiculo = "SELECT v.* FROM vehiculo v WHERE v.numero_placa = :numero_placa";
-        Map<String, Object> vehiculoParameters = Collections.singletonMap("numero_placa", servicio.getVehiculo());
+        Map<String, Object> vehiculoParameters = Collections.singletonMap("numero_placa", servicio.getVehiculo_placa());
         Vehiculo vehiculo = jdbcTemplate.queryForObject(sqlVehiculo, vehiculoParameters, Vmapper);
 
         // Obtener la información del cliente relacionado
@@ -155,6 +161,98 @@ public class ServicioRepository {
 
         return servicio;
     }
+
+    public long createServicioP(Servicio newServicioP) {
+        String sql = "INSERT INTO servicio (fecha_ingreso, descripcion, horas_invertidas,costo_total_mano_de_obra, vehiculo_placa) " +
+                "VALUES (:fecha_ingreso, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :vehiculo_placa)";
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("fecha_ingreso", newServicioP.getFecha_ingreso());
+        parameters.put("descripcion", newServicioP.getDescripcion());
+        parameters.put("horas_invertidas", newServicioP.getHoras_invertidas());
+        parameters.put("costo_total_mano_de_obra", newServicioP.getCosto_total_mano_de_obra());
+        parameters.put("vehiculo_placa", newServicioP.getVehiculo_placa());
+
+        return jdbcTemplate.update(sql, parameters);
+
+    }
+
+    public ResponseEntity<String> createServicioPlaca(Servicio newServicio) {
+        String sql = "INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo_placa) " +
+                "VALUES (:fecha_ingreso, :fecha_conclusion, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :costo_total_facturado, :porcentaje_utilidad, :vehiculo_placa)";
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("fecha_ingreso", newServicio.getFecha_ingreso());
+        parameters.put("fecha_conclusion", newServicio.getFecha_conclusion());
+        parameters.put("descripcion", newServicio.getDescripcion());
+        parameters.put("horas_invertidas", newServicio.getHoras_invertidas());
+        parameters.put("costo_total_mano_de_obra", newServicio.getCosto_total_mano_de_obra());
+        parameters.put("costo_total_facturado", newServicio.getCosto_total_facturado());
+        parameters.put("porcentaje_utilidad", newServicio.getPorcentaje_utilidad());
+        parameters.put("vehiculo_placa", newServicio.getVehiculo_placa());
+
+        try {
+            // Validar que el número de placa del vehículo existe
+            if (!vehiculoRepository.existsByPlaca(newServicio.getVehiculo_placa())) {
+                throw new RuntimeException("El número de placa del vehículo no existe");
+            }
+
+            jdbcTemplate.update(sql, parameters);
+            return new ResponseEntity<>("Servicio creado exitosamente", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // Imprime la excepción en la consola
+            return new ResponseEntity<>("El número de placa del vehículo no existe", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /*public ResponseEntity<String> createServicioPla(Servicio newServicioP) {
+        String sql = "INSERT INTO servicio (fecha_ingreso, descripcion, horas_invertidas, costo_total_mano_de_obra, vehiculo_placa) " +
+                "VALUES (:fecha_ingreso, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :vehiculo_placa)";
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("fecha_ingreso", newServicioP.getFecha_ingreso());
+        parameters.put("descripcion", newServicioP.getDescripcion());
+        parameters.put("horas_invertidas", newServicioP.getHoras_invertidas());
+        parameters.put("costo_total_mano_de_obra", newServicioP.getCosto_total_mano_de_obra());
+        parameters.put("vehiculo_placa", newServicioP.getPlaca_vehiculo());
+
+        try {
+            // Validar que el número de placa del vehículo existe
+            if (!vehiculoRepository.existsByPlaca(newServicioP.getPlaca_vehiculo())) {
+                throw new RuntimeException("El número de placa del vehículo no existe");
+            }
+
+            jdbcTemplate.update(sql, parameters);
+            return new ResponseEntity<>("Servicio creado exitosamente", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // Imprime la excepción en la consola
+            return new ResponseEntity<>("El número de placa del vehículo no existe", HttpStatus.BAD_REQUEST);
+        }
+    } */
+   /* public ResponseEntity<String> createServicioPlaca(Servicio newServicioP) {
+        String sql = "INSERT INTO servicio (fecha_ingreso, descripcion, horas_invertidas, costo_total_mano_de_obra, vehiculo_placa) " +
+                "VALUES (:fecha_ingreso, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :vehiculo_placa)";
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("fecha_ingreso", newServicioP.getFecha_ingreso());
+        parameters.put("descripcion", newServicioP.getDescripcion());
+        parameters.put("horas_invertidas", newServicioP.getHoras_invertidas());
+        parameters.put("costo_total_mano_de_obra", newServicioP.getCosto_total_mano_de_obra());
+        parameters.put("vehiculo_placa", newServicioP.getPlaca_vehiculo());
+
+        try {
+            // Validar que el número de placa del vehículo existe
+            if (!vehiculoRepository.existsByPlaca(newServicioP.getPlaca_vehiculo())) {
+                throw new RuntimeException("El número de placa del vehículo no existe");
+            }
+
+            jdbcTemplate.update(sql, parameters);
+            return new ResponseEntity<>("Servicio creado exitosamente", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // Imprime la excepción en la consola
+            return new ResponseEntity<>("El número de placa del vehículo no existe", HttpStatus.BAD_REQUEST);
+        }
+    } */
 
     public Vehiculo getVehiculoByPlaca(String placa) {
         String sql = "SELECT c.*, v.* FROM cliente c " +
@@ -202,7 +300,7 @@ public class ServicioRepository {
         parameters.put("descripcion", newServicioInicial.getDescripcion());
         parameters.put("horas_invertidas", newServicioInicial.getHoras_invertidas());
         parameters.put("costo_total_mano_de_obra", newServicioInicial.getCosto_total_mano_de_obra());
-        parameters.put("vehiculo_placa", newServicioInicial.getVehiculo());
+        parameters.put("vehiculo_placa", newServicioInicial.getVehiculo_placa());
 
         return jdbcTemplate.update(sql, parameters);
     }
