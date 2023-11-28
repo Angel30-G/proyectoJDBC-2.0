@@ -54,7 +54,6 @@ public class VehiculoRepository {
         @Override
         public Vehiculo mapRow(ResultSet sr, int rowNum) throws SQLException {
 
-            long id = sr.getInt("id");
             String numeroPlaca = sr.getString("numero_placa");
             String marca = sr.getNString("marca");
             String modelo = sr.getNString("modelo");
@@ -64,7 +63,7 @@ public class VehiculoRepository {
 
 
 
-            return new Vehiculo(id, numeroPlaca, marca, modelo, anoFabricacion, VIN, cliente);
+            return new Vehiculo(numeroPlaca, marca, modelo, anoFabricacion, VIN, cliente);
 
 
         }

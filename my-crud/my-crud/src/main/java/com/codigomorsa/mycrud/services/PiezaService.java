@@ -22,4 +22,8 @@ public class PiezaService {
     public long createPieza(Pieza newPieza) {
         return repository.createPieza(newPieza);
     }
+
+    public boolean existsByCodigo(String codigo){
+        return repository.existsByCodigo(codigo);
+    }
 }

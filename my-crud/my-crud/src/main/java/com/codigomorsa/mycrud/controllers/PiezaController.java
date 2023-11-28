@@ -26,4 +26,8 @@ public class PiezaController {
     public long createPieza(@RequestBody Pieza newPieza) {
         return PiezaService.createPieza(newPieza);
     }
+
+    public boolean existsByCodigo(String codigo){
+        return PiezaService.existsByCodigo(codigo);
+    }
 }

@@ -62,7 +62,6 @@ public class ServicioRepository {
         @Override
         public Vehiculo mapRow(ResultSet sr, int rowNum) throws SQLException {
 
-            long id = sr.getInt("id");
             String numeroPlaca = sr.getString("numero_placa");
             String marca = sr.getNString("marca");
             String modelo = sr.getNString("modelo");
@@ -72,7 +71,7 @@ public class ServicioRepository {
 
 
 
-            return new Vehiculo(id, numeroPlaca, marca, modelo, anoFabricacion, VIN, cliente);
+            return new Vehiculo(numeroPlaca, marca, modelo, anoFabricacion, VIN, cliente);
 
 
         }
@@ -86,7 +85,7 @@ public class ServicioRepository {
             String codigo = sr.getNString("codigo");
             int cantidad = sr.getInt("cantidad");
             int costoTotal = sr.getInt("costo_total");
-            int pieza = sr.getInt("pieza");
+            String pieza = sr.getString("codigo_pieza");
             int servicio = sr.getInt("servicio");
             return new Piezas_Compradas(id, codigo, cantidad, costoTotal, pieza, servicio);
 
@@ -127,7 +126,7 @@ public class ServicioRepository {
 
     public Servicio getServicioById(long id) {
         String sql = "SELECT s.*, c.* FROM servicio s " +
-                "JOIN vehiculo v ON s.vehiculo = v.id " +
+                "JOIN vehiculo v ON s.vehiculo_placa = v.numero_placa " +
                 "JOIN cliente c ON v.cliente = c.id " +
                 "WHERE s.id = :id";
 
@@ -135,8 +134,8 @@ public class ServicioRepository {
         Servicio servicio = jdbcTemplate.queryForObject(sql, parameters, new ServicioMapper());
 
         // Obtener la información del vehículo relacionado
-        String sqlVehiculo = "SELECT v.* FROM vehiculo v WHERE v.id = :vehiculoId";
-        Map<String, Object> vehiculoParameters = Collections.singletonMap("vehiculoId", servicio.getVehiculo());
+        String sqlVehiculo = "SELECT v.* FROM vehiculo v WHERE v.numero_placa = :numero_placa";
+        Map<String, Object> vehiculoParameters = Collections.singletonMap("numero_placa", servicio.getVehiculo());
         Vehiculo vehiculo = jdbcTemplate.queryForObject(sqlVehiculo, vehiculoParameters, Vmapper);
 
         // Obtener la información del cliente relacionado
@@ -193,57 +192,21 @@ public class ServicioRepository {
         return servicioList;
     }
 
-    /*
-    public long createServicio(Servicio newServicio) {
-        String sql = "INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo) " +
-                "VALUES (:fecha_ingreso, :fecha_conclusion, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :costo_total_facturado, :porcentaje_utilidad, :vehiculo)";
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("fecha_ingreso", newServicio.getFecha_ingreso());
-        parameters.put("fecha_conclusion", newServicio.getFecha_conclusion());
-        parameters.put("descripcion", newServicio.getDescripcion());
-        parameters.put("horas_invertidas", newServicio.getHoras_invertidas());
-        parameters.put("costo_total_mano_de_obra", newServicio.getCosto_total_mano_de_obra());
-        parameters.put("costo_total_facturado", newServicio.getCosto_total_facturado());
-        parameters.put("porcentaje_utilidad", newServicio.getPorcentaje_utilidad());
-        parameters.put("vehiculo", newServicio.getVehiculo());
-
-        return jdbcTemplate.update(sql, parameters);
-    }*/
 
      public long createServicioInicial(Servicio newServicioInicial) {
-        String sql = "INSERT INTO servicio (fecha_ingreso, descripcion, horas_invertidas,costo_total_mano_de_obra, vehiculo) " +
-                "VALUES (:fecha_ingreso, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :vehiculo)";
+        String sql = "INSERT INTO servicio (fecha_ingreso, descripcion, horas_invertidas,costo_total_mano_de_obra, vehiculo_placa) " +
+                "VALUES (:fecha_ingreso, :descripcion, :horas_invertidas, :costo_total_mano_de_obra, :vehiculo_placa)";
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("fecha_ingreso", newServicioInicial.getFecha_ingreso());
         parameters.put("descripcion", newServicioInicial.getDescripcion());
         parameters.put("horas_invertidas", newServicioInicial.getHoras_invertidas());
         parameters.put("costo_total_mano_de_obra", newServicioInicial.getCosto_total_mano_de_obra());
-        parameters.put("vehiculo", newServicioInicial.getVehiculo());
+        parameters.put("vehiculo_placa", newServicioInicial.getVehiculo());
 
         return jdbcTemplate.update(sql, parameters);
     }
 
-    /*public long createCierreServicio(Servicio newServicioCierreServicio){
-        String sql = "UPDATE SERVICIO " +
-        "SET fecha_conclusion = :fecha_conclusion, " +
-        "horas_invertidas = :horas_invertidas, " +
-        "costo_total_mano_de_obra = :costo_total_mano_de_obra, " +
-        "costo_total_facturado = :costo_total_facturado, " +
-        "porcentaje_utilidad = :porcentaje_utilidad " +
-        "WHERE id = :id";
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("fecha_conclusion", newServicioCierreServicio.getFecha_conclusion());
-        parameters.put("horas_invertidas", newServicioCierreServicio.getHoras_invertidas());
-        parameters.put("costo_total_mano_de_obra", newServicioCierreServicio.getCosto_total_mano_de_obra());
-        parameters.put("costo_total_facturado", newServicioCierreServicio.getCosto_total_facturado());
-        parameters.put("porcentaje_utilidad", newServicioCierreServicio.getPorcentaje_utilidad());
-
-        return jdbcTemplate.update(sql, parameters);
-    }
-    */
 
     public long createCierreServicio(Servicio newServicioCierreServicio, long idServicio){
         String sql = "UPDATE SERVICIO " +
@@ -277,7 +240,7 @@ public class ServicioRepository {
             int costoTotalManoDeObra = sr.getInt("costo_total_mano_de_obra");
             int costoTotalFacturado = sr.getInt("costo_total_facturado");
             int porcentajeUtilidad = sr.getInt("porcentaje_utilidad");
-            int vehiculo = sr.getInt("vehiculo");
+            String vehiculo = sr.getString("vehiculo_placa");
             return new Servicio(id, fechaIngreso, fechaConclusion, descripcion, horasInvertidas, costoTotalManoDeObra, costoTotalFacturado, porcentajeUtilidad, vehiculo);
 
 

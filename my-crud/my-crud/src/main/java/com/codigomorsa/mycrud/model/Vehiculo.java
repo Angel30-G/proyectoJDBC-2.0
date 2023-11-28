@@ -5,9 +5,6 @@ import java.util.List;
 
 public class Vehiculo {
 
-
-    public final long id;
-
     public final String numero_placa;
 
     public final String marca;
@@ -39,10 +36,6 @@ public class Vehiculo {
         this.clienteList = clienteList;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public String getNumero_placa() {
         return numero_placa;
     }
@@ -70,8 +63,7 @@ public class Vehiculo {
     public final int cliente;
 
 
-    public Vehiculo(long id, String numeroPlaca, String marca, String modelo, Date anofabricacion, String vin, int cliente) {
-        this.id = id;
+    public Vehiculo(String numeroPlaca, String marca, String modelo, Date anofabricacion, String vin, int cliente) {
         numero_placa = numeroPlaca;
         this.marca = marca;
         this.modelo = modelo;

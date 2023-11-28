@@ -20,7 +20,7 @@ public class Servicio {
 
     public final int porcentaje_utilidad;
 
-    public final int vehiculo;
+    public final String vehiculo;
 
     private List<Cliente> clienteList;
 
@@ -55,7 +55,7 @@ public class Servicio {
     }
 
 
-    public Servicio(long id, Date fechaIngreso, Date fechaConclusion, String descripcion, int horasInvertidas, int costoTotalManoDeObra, int costoTotalFacturado, int porcentajeUtilidad, int vehiculo) {
+    public Servicio(long id, Date fechaIngreso, Date fechaConclusion, String descripcion, int horasInvertidas, int costoTotalManoDeObra, int costoTotalFacturado, int porcentajeUtilidad, String vehiculo) {
         this.id = id;
         fecha_ingreso = fechaIngreso;
         fecha_conclusion = fechaConclusion;
@@ -99,7 +99,7 @@ public class Servicio {
         return porcentaje_utilidad;
     }
 
-    public int getVehiculo() {
+    public String getVehiculo() {
         return vehiculo;
     }
 

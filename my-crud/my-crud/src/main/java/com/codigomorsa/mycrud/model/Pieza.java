@@ -2,9 +2,6 @@ package com.codigomorsa.mycrud.model;
 
 
 public class Pieza {
-    public long getId() {
-        return id;
-    }
 
     public String getCodigo() {
         return codigo;
@@ -19,8 +16,6 @@ public class Pieza {
     }
 
 
-    public final long id;
-
     public final String codigo;
 
     public final String descripcion;
@@ -31,8 +26,7 @@ public class Pieza {
 
 
 
-    public Pieza(long id, String codigo, String descripcion, int costo) {
-        this.id = id;
+    public Pieza(String codigo, String descripcion, int costo) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.costo = costo;

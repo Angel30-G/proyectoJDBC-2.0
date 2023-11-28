@@ -54,11 +54,10 @@ create table vehiculo(
   
 
 create table pieza(
-  id int not null auto_increment,
   codigo varchar(50) not null,
   descripcion varchar(50) not null,
   costo int not null,
-  primary key(id)
+  primary key(codigo)
 );
 
 create table servicio(
@@ -80,10 +79,10 @@ create table piezas_compradas(
   codigo varchar(50) not null,
   cantidad int not null,
   costo_total int not null,
-  pieza int,
+  codigo_pieza varchar(50),
   servicio int,
   primary key(id),
-  foreign key(pieza) references pieza(id),
+  foreign key(codigo_pieza) references pieza(codigo),
   foreign key(servicio) references servicio(id)
 );
 
@@ -177,14 +176,10 @@ VALUES
   ('2023-01-01', '2023-01-05', 'Reparación de motor', 7, 45000, null, null, 'ABC123');
   
 
-INSERT INTO servicio (fecha_ingreso, fecha_conclusion, descripcion, horas_invertidas, costo_total_mano_de_obra, costo_total_facturado, porcentaje_utilidad, vehiculo_placa) 
-VALUES
-  ('2023-01-01', '2023-01-05', 'Reparación de motor', 7, 18000, null, null,'ABC123');
-
 -- Insert into piezas_compradas table
-INSERT INTO piezas_compradas (codigo, cantidad, costo_total, pieza, servicio) 
+INSERT INTO piezas_compradas (codigo, cantidad, costo_total, codigo_pieza, servicio) 
 VALUES
-  ('P001', 2, 200, 1, 1);
+  ('P001', 2, 200, 'P001', 1);
 
 
   
@@ -192,4 +187,4 @@ call calcular_datos_financieros(1);
 
 select * from servicio;
 
-select * from vehiculo;
+select * from pieza;

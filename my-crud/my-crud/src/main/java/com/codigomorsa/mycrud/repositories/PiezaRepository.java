@@ -54,9 +54,18 @@ public class PiezaRepository {
             int costo = sr.getInt("costo");
 
 
-            return new Pieza(id, codigo, descripcion, costo);
+            return new Pieza(codigo, descripcion, costo);
 
 
         }
+    }
+
+    public boolean existsByCodigo(String codigo) {
+        String sql = "SELECT COUNT(*) FROM pieza WHERE codigo = :codigo";
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("codigo", codigo);
+
+        int count = jdbcTemplate.queryForObject(sql, parameters, Integer.class);
+        return count > 0;
     }
 }
